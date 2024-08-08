@@ -64,27 +64,22 @@ module "blog_alb" {
   security_groups = [module.blog_sg.security_group_id]
 
 
-  listeners = {
-    ex-http-https-redirect = {
-      port     = 80
-      protocol = "HTTP"
-      redirect = {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
-      }
-    }
-  }
-
-  target_groups = {
-    ex-instance = {
+  target_groups = [
+    {
       name_prefix      = "blog-"
-      protocol         = "HTTP"
-      port             = 80
+      backend_protocol = "HTTP"
+      backend_port     = 80
       target_type      = "instance"
-      target_id        = module.blog_alb.id
     }
-  }
+  ]
+
+  http_tcp_listeners = [
+    {
+      port               = 80
+      protocol           = "HTTP"
+      target_group_index = 0
+    }
+  ]
 
   tags = {
     Environment = "dev"
