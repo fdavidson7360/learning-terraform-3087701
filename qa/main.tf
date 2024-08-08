@@ -1,5 +1,5 @@
 module "qa" {
-    source = "../modules/blog"
+    source = "../modules/qa"
 
     enviornment = {
         name           = "qa"
